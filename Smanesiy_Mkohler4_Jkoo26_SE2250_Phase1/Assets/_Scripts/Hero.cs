@@ -35,30 +35,8 @@ public class Hero : MonoBehaviour
         float yAxis = Input.GetAxis("Vertical");
 
         Vector3 pos = transform.position;
-        if (pos.x > 28)
-        {
-            pos.x = 28;
-        }
-        else if (pos.x < -28)
-        {
-            pos.x = -28;
-        }
-        else
-        {
-            pos.x += xAxis * speed * Time.deltaTime;
-        }
-        if (pos.y < -35)
-        {
-            pos.y = -35;
-        }
-        else if (pos.y > 38)
-        {
-            pos.y = 38;
-        }
-        else
-        {
-            pos.y += yAxis * speed * Time.deltaTime;
-        }
+        pos.y += yAxis * speed * Time.deltaTime;
+        pos.x += xAxis * speed * Time.deltaTime;
         transform.position = pos;
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
 

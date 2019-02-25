@@ -24,7 +24,8 @@ public class BoundsCheck : MonoBehaviour
     {
         Vector3 pos = transform.position;
         isOnScreen = true;
-        offDown = offLeft = offRight = offUp = false;
+        offRight = offUp = false;
+        offLeft = offDown = false;
 
         if (pos.x > camWidth - radius)
         {
@@ -34,7 +35,7 @@ public class BoundsCheck : MonoBehaviour
         }
         if (pos.x < -camWidth + radius)
         {
-            pos.x = -camWidth - radius;
+            pos.x = -camWidth + radius;
             isOnScreen = false;
             offLeft = true;
         }
@@ -44,9 +45,9 @@ public class BoundsCheck : MonoBehaviour
             isOnScreen = false;
             offUp = true;
         }
-        if (pos.y < -camHeight + radius)
+        if (pos.y < -camHeight + radius + 3)
         {
-            pos.y = -camHeight + radius;
+            pos.y = -camHeight + radius + 3;
             isOnScreen = false;
             offDown = true;
         }
@@ -61,6 +62,6 @@ public class BoundsCheck : MonoBehaviour
             if (!Application.isPlaying) return;
             Vector3 boundSize = new Vector3(camWidth * 2, camHeight * 2, 0.1f);
             Gizmos.DrawWireCube(Vector3.zero, boundSize);
-        }
+        }
     }
 }
