@@ -9,10 +9,10 @@ public class Enemy : MonoBehaviour
     public float fireRate = 0.3f;
     public float health = 10;
     public int score = 100;
-    private BoundsCheck bndCheck;
+    private BoundsCheck _bndCheck;
     void Awake()
     {
-        bndCheck = GetComponent<BoundsCheck>();
+        _bndCheck = GetComponent<BoundsCheck>();
     }
     public Vector3 pos
     {
@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        //if the enemy moves off the screen in the y direction destroy the object
         Move();
         if(pos.y < -40)
         {
@@ -37,6 +38,7 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Move()
     {
+        //Moves the two enemies straight downward 
         Vector3 tempPos = pos;
         tempPos.y -= speed * Time.deltaTime;
         pos = tempPos;

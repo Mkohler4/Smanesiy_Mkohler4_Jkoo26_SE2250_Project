@@ -9,7 +9,7 @@ public class Enemy_1 : Enemy
     // Start is called before the first frame update
     void Start()
     {
-
+        //Chooses the the direction of the 45 degree enemy based off where they spawn
         if (pos.x > (Camera.main.orthographicSize* Camera.main.aspect)/2)
         {
             rndnumber = 1;
@@ -18,8 +18,10 @@ public class Enemy_1 : Enemy
     }
     public override void Move()
     {
+        //If they spawn more to the left of the screen
         if (rndnumber == 1)
         {
+            //Move the enemy left downwards
             Vector3 tempPos = pos;
             tempPos.x -= speed * Time.deltaTime;
             tempPos.y -= speed * Time.deltaTime;
@@ -27,6 +29,7 @@ public class Enemy_1 : Enemy
         }
         else
         {
+            //Move enemy right downwards
             Vector3 tempPos = pos;
             tempPos.x += speed * Time.deltaTime;
             tempPos.y -= speed * Time.deltaTime;
