@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public float speed = 10f;
     public float fireRate = 0.3f;
     public float health = 10;
-    public int score = 100;
+    protected int score = 100;
     public float showDamageDuration = 0.1f; //#seconds to show damage
 
     [Header("Set Dynamically: Enemy")]
@@ -90,6 +90,8 @@ public class Enemy : MonoBehaviour
                 {
                     // Destroy this Enemy
                     Destroy(this.gameObject);
+                    //ScoreManager.S.addScore(score);
+                    ScoreManager.score += 100;
                 }
                 Destroy(otherGO);
                 ShowDamage();

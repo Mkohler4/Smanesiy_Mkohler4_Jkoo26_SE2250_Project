@@ -111,6 +111,7 @@ public class Hero : MonoBehaviour
             if (value < 0)
             {
                 Destroy(this.gameObject);
+                ScoreManager.score = 0;
                 //Tell Main.ship to restart the game after a delay
                 Main.ship.DelayedRestart(gameRestartDelay);
             }

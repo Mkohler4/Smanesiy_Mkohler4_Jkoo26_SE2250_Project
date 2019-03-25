@@ -11,12 +11,14 @@ public class Enemy_2 : Enemy
     public float waveRotY = 45;
     private float _x0;
     private float _birthTime;
-    
+
+
     //Start is called before the first frame update
     void Start()
     {
         _x0 = pos.x;
         _birthTime = Time.time;
+        score = 50;
     }
 
     //Overide Move function on Enemy
@@ -48,6 +50,8 @@ public class Enemy_2 : Enemy
                 {
                     // Destroy this Enemy
                     Destroy(this.gameObject);
+                    //ScoreManager.S.addScore(score);
+                    ScoreManager.score += 50;
                 }
                 Destroy(otherGO);
                 ShowDamage();

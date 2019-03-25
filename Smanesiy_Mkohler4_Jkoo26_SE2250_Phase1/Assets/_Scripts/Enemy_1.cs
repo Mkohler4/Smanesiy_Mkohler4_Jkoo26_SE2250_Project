@@ -9,6 +9,7 @@ public class Enemy_1 : Enemy
     // Start is called before the first frame update
     void Start()
     {
+        score = 25;
         //Chooses the the direction of the 45 degree enemy based off where they spawn
         if (pos.x > (Camera.main.orthographicSize* Camera.main.aspect)/2)
         {
@@ -58,7 +59,9 @@ public class Enemy_1 : Enemy
                 if (health <= 0)
                 {
                     // Destroy this Enemy
+                    //ScoreManager.S.addScore(score);
                     Destroy(this.gameObject);
+                    ScoreManager.score += 25;
                 }
                 Destroy(otherGO);
                 ShowDamage();
