@@ -29,6 +29,7 @@ public class Main : MonoBehaviour
             WEAP_DICT[def.type] = def;
         }
     }
+    
     //Gets called every second
     public void SpawnEnemy()
     {

@@ -23,9 +23,9 @@ public class WeaponDefinition
     public string letter;       //Letter to show on the power-up
     public Color color = Color.white;   //Color of Collar and power-up
     public GameObject projectilePrefab; //Prefab for projectiles
-    public Color projectileColor = Color.white; 
-    public float damageOnHit = 0;   //Amount of damage caused
-    public float continuousDamage = 0;  //Damage per second(Laser)
+    public Color projectileColor = Color.white;
+    public float damageOnHit = 1000;   //Amount of damage caused
+    public float continuousDamage = 1;  //Damage per second(Laser)
     public float delayBetweenShots = 0; 
     public float velocity = 20; //Speed of Projectiles
 
@@ -42,6 +42,7 @@ public class Weapon : MonoBehaviour
     public float lastShotTime; // Time las shot was fired
 
     private Renderer collarRend;
+
     
     // Start is called before the first frame update
     void Start()
@@ -156,6 +157,16 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if(type == WeaponType.simple)
+            {
+                type = WeaponType.blaster;
+            }
+            else
+            {
+                type = WeaponType.simple;
+            }
+        }
     }
 }

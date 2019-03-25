@@ -35,4 +35,28 @@ public class Enemy_2 : Enemy
 
         base.Move();
     }
+    public override void OnCollisionEnter(Collision coll)
+    {
+        GameObject otherGO = coll.gameObject;
+        switch (otherGO.tag)
+        {
+            case "ProjectileHero":
+                Projectile p = otherGO.GetComponent<Projectile>();
+                
+                health -= 5; //Main.GetWeaponDefinition(p.type).damageOnHit;
+                if (health <= 0)
+                {
+                    // Destroy this Enemy
+                    Destroy(this.gameObject);
+                }
+                Destroy(otherGO);
+                ShowDamage();
+                break;
+
+            default:
+                print("Enemy hit by non-ProjectileHero: " + otherGO.name);
+                break;
+        }
+
+    }
 }

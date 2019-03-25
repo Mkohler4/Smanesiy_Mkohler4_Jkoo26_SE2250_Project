@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Hero : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Hero : MonoBehaviour
     public float gameRestartDelay = 2f;
     public GameObject projectilePrefab;
     public float projectileSpeed = 40;
+
+   
 
 
     [Header("Set Dynamically")]
@@ -113,4 +116,5 @@ public class Hero : MonoBehaviour
             }
         }
     }
+    
 }
