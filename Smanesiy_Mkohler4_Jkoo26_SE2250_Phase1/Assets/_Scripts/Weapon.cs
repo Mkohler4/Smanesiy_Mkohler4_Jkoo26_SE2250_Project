@@ -8,9 +8,6 @@ public enum WeaponType
     none,   //The default / no weapon
     simple,    //A simple blaster
     blaster,     //Two shots simultaneously
-    phaser,     
-    missile,
-    laser,
     shield      //Raise shieldLevel
 }
 //The WeaponDefinition class allows you to set the properties
@@ -41,14 +38,14 @@ public class Weapon : MonoBehaviour
     public GameObject collar;
     public float lastShotTime; // Time las shot was fired
 
-    private Renderer collarRend;
+    private Renderer _collarRend;
 
     
     // Start is called before the first frame update
     void Start()
     {
         collar = transform.Find("Collar").gameObject;
-        collarRend = collar.GetComponent<Renderer>();
+        _collarRend = collar.GetComponent<Renderer>();
 
         // Call SetType() for the default _type of WeaponType.none
         SetType(_type);
@@ -68,6 +65,7 @@ public class Weapon : MonoBehaviour
         }
         
     }
+    //Getter/Setter method public property
     public WeaponType type
     {
         get
@@ -79,9 +77,11 @@ public class Weapon : MonoBehaviour
             SetType(value);
         }
     }
-    public void SetType(WeaponType wt)
+    //Set the weapon of choice
+    //If weapon type is none the game object is disabled and visually disappears from the scene
+    public void SetType(WeaponType weaponType)
     {
-        _type = wt;
+        _type = weaponType;
         if(type == WeaponType.none)
         {
             this.gameObject.SetActive(false);
@@ -92,71 +92,85 @@ public class Weapon : MonoBehaviour
             this.gameObject.SetActive(true);
         }
         def = Main.GetWeaponDefinition(_type);
-        collarRend.material.color = def.color;
-        lastShotTime = 0; // You can fire immediately after _type is set
+        //Grab the projectile color
+        _collarRend.material.color = def.color;
+        lastShotTime = 0; // Setting lastShotTime to zero allows the weapon to fire immedietly
     }
     public void Fire()
     {
-        // If this.gameObject is inactive, return
+        // If this.gameObject is inactive, return, weapon will not fire
         if (!gameObject.activeInHierarchy) return;
         //If it hasn't been enough time netween shots, return
+        //If the current time minus the lastShotTime is less that the delatBetweenShots weapon will not fire
         if(Time.time - lastShotTime < def.delayBetweenShots)
         {
             return;
         }
-        Projectile p;
+        Projectile projectile;
         Vector3 vel = Vector3.up * def.velocity;
+        //Initial velocity is set upward but if enemy weapons are facing downward the vel component is set downward aswell
         if(transform.up.y < 0)
         {
             vel.y = -vel.y;
         }
+        //Returns a reference to the projectile class instance attached to the new projectile game object
         switch (type)
         {
+            //Project the simple weapon
             case WeaponType.simple:
-                p = MakeProjectile();
-                p.rigid.velocity = vel;
+                projectile = MakeProjectile(); //Make projectile
+                //Assign velocity to the gameobjects rigid body in direction of vel
+                projectile.rigid.velocity = vel;
                 break;
 
-
+            //Project the blaster, three projectiles are created, to have their direction rotated 30 degrees
             case WeaponType.blaster:
-                p = MakeProjectile();   // Make projectile
-                p.rigid.velocity = vel;
-                p = MakeProjectile();   //Make projectile
-                p.transform.rotation = Quaternion.AngleAxis(30, Vector3.back);
-                p.rigid.velocity = p.transform.rotation * vel;
-                p = MakeProjectile();   //Make projectile
-                p.transform.rotation = Quaternion.AngleAxis(-30, Vector3.back);
-                p.rigid.velocity = p.transform.rotation * vel;
+                projectile = MakeProjectile();   // Make projectile
+                //Assign velocity to the gameobjects rigid body in direction of vel
+                projectile.rigid.velocity = vel;
+                projectile = MakeProjectile();   //Make projectile
+                //Rotate projectile around vector3.back axis
+                projectile.transform.rotation = Quaternion.AngleAxis(30, Vector3.back);
+                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                projectile = MakeProjectile();   //Make projectile
+                //Rotate projectile around vector3.back axis
+                projectile.transform.rotation = Quaternion.AngleAxis(-30, Vector3.back);
+                projectile.rigid.velocity = projectile.transform.rotation * vel;
                 break;
 
         }
                     
     }
+    //Instantiates a clone of the prefab stored in the weapon definition, return reference attached projectile class instance
     public Projectile MakeProjectile()
     {
-        GameObject go = Instantiate<GameObject>(def.projectilePrefab);
+        GameObject gameObj = Instantiate<GameObject>(def.projectilePrefab);
+        //Projectile is given the proper tag and physics layer
         if(transform.parent.gameObject.tag == "Hero")
         {
-            go.tag = "ProjectileHero";
-            go.layer = LayerMask.NameToLayer("ProjectileHero");
+            gameObj.tag = "ProjectileHero";
+            gameObj.layer = LayerMask.NameToLayer("ProjectileHero");
 
         } else
         {
-            go.tag = "ProjectileEnemy";
-            go.layer = LayerMask.NameToLayer("ProjectileEnemy");
+            gameObj.tag = "ProjectileEnemy";
+            gameObj.layer = LayerMask.NameToLayer("ProjectileEnemy");
         }
-        go.transform.position = collar.transform.position;
-        go.transform.SetParent(PROJECTILE_ANCHOR, true);
-        Projectile p = go.GetComponent<Projectile>();
-        p.type = type;
+        gameObj.transform.position = collar.transform.position;
+        //The projectile GameObject's parent is set to projectil_anchor
+        gameObj.transform.SetParent(PROJECTILE_ANCHOR, true);
+        Projectile projectile = gameObj.GetComponent<Projectile>();
+        projectile.type = type;
+        //LastShotTime is set to current time, preventing weapon from shooting for delayBetweenShots
         lastShotTime = Time.time;
-        return (p);
+        return (projectile);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        //If keycode C is pressed switch the current weapon
         if (Input.GetKeyDown(KeyCode.C))
         {
             if(type == WeaponType.simple)

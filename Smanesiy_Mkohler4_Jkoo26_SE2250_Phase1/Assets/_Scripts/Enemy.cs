@@ -35,6 +35,7 @@ public class Enemy : MonoBehaviour
     }
     public Vector3 pos
     {
+        //Public property
         get
         {
             return (this.transform.position);
@@ -49,10 +50,6 @@ public class Enemy : MonoBehaviour
     {
         //if the enemy moves off the screen in the y direction destroy the object
         Move();
-        /*if(pos.y < -40)
-        {
-            Destroy(gameObject);
-        }*/
         if(_bndCheck != null && _bndCheck.offDown)
         {
             Destroy(gameObject);
@@ -84,14 +81,13 @@ public class Enemy : MonoBehaviour
                     break;
                 }
                 // Hurt this Enemy
-                // Get the damage amount from the Main WEAP_DICT
-                health -= 2; //Main.GetWeaponDefinition(p.type).damageOnHit;
+                health -= 2;
                 if(health <= 0 )
                 {
                     // Destroy this Enemy
                     Destroy(this.gameObject);
-                    //ScoreManager.S.addScore(score);
-                    ScoreManager.score += 100;
+                    //Update score when specific enemy is destroyed by 100
+                    ScoreManager.SCORE += 100;
                 }
                 Destroy(otherGO);
                 ShowDamage();
@@ -106,23 +102,22 @@ public class Enemy : MonoBehaviour
 
     public void ShowDamage()
     {
+        //When shot at change enemy colour to red on impact
         foreach (Material mats in materials)
         {
             mats.color = Color.red;
-
-
         }
         showingDamage = true;
+        //Show damage for showDamageDuration time
         damageDoneTime = Time.time + showDamageDuration;
     }
     public void UnShowDamage()
     {
+        //Change back to original color once the bullet is already impacted the enemy 
         for(int i=0; i < materials.Length; i++)
         {
             materials[i].color = originalColors[i];
         }
         showingDamage = false;
-
-    
     }
 }

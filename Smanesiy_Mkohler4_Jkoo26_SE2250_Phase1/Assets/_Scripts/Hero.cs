@@ -51,33 +51,12 @@ public class Hero : MonoBehaviour
         transform.position = pos;
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
 
-        //Allow the ship to fire
-       // if(Input.GetKeyDown(KeyCode.Space))
-      //  {
-      //      TempFire();
-      //  }
-
-        //Use the fireDelegate to fire Weapons
-        //First, make sure the button is oressed: Axis("Jump")
-        //Then ensure that fireDelegate isn't null to avoid an error
         if(Input.GetAxis("Jump") == 1 && fireDelegate != null)
         {
             fireDelegate();
         }
 
     }
-    /*void TempFire()
-    {
-        GameObject projGO = Instantiate<GameObject>(projectilePrefab);
-        projGO.transform.position = transform.position;
-        Rigidbody rigidB = projGO.GetComponent<Rigidbody>();
-        rigidB.velocity = Vector3.up * projectileSpeed;
-
-        Projectile proj = projGO.GetComponent<Projectile>();
-        proj.type = WeaponType.blaster;
-        float tSpeed = Main.GetWeaponDefinition(proj.type).velocity;
-        rigidB.velocity = Vector3.up * tSpeed;
-    }*/
     void OnTriggerEnter(Collider other)
     {
         Transform rootT = other.gameObject.transform.root;
@@ -111,9 +90,9 @@ public class Hero : MonoBehaviour
             if (value < 0)
             {
                 Destroy(this.gameObject);
-                ScoreManager.score = 0;
+                ScoreManager.SCORE = 0;
                 //Tell Main.ship to restart the game after a delay
-                Main.ship.DelayedRestart(gameRestartDelay);
+                Main.SHIP.DelayedRestart(gameRestartDelay);
             }
         }
     }

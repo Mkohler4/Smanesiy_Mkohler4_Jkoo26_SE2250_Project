@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
-    static public Main ship;
+    static public Main SHIP;
     static Dictionary<WeaponType, WeaponDefinition> WEAP_DICT;
 
     [Header("Set in Inspector")]
@@ -17,7 +17,7 @@ public class Main : MonoBehaviour
 
     void Awake()
     {
-        ship = this;
+        SHIP = this;
         _bndCheck = GetComponent<BoundsCheck>();
         //Takes method name and invokes it every 1 second
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);

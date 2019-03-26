@@ -11,7 +11,7 @@ public class Shield : MonoBehaviour
     [Header("Set Dynamically")]
     public int levelShown = 0;
 
-    //This is non-public variable will not appear in the inspector
+    //Variable will not appear in the inspector
     Material mat;
 
     // Start is called before the first frame update

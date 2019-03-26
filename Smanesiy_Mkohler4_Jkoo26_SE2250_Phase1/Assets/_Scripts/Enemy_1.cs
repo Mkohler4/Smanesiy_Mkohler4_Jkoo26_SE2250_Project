@@ -48,20 +48,12 @@ public class Enemy_1 : Enemy
             case "ProjectileHero":
                 Projectile p = otherGO.GetComponent<Projectile>();
                 // If this enemy is off screen don't damage it
-                /*if (!_bndCheck.isOnScreen)
-                {
-                    Destroy(otherGO);
-                    break;
-                }*/
-                // Hurt this Enemy
-                // Get the damage amount from the Main WEAP_DICT
-                health -= 10; //Main.GetWeaponDefinition(p.type).damageOnHit;
+                health -= 10;
                 if (health <= 0)
                 {
                     // Destroy this Enemy
-                    //ScoreManager.S.addScore(score);
                     Destroy(this.gameObject);
-                    ScoreManager.score += 25;
+                    ScoreManager.SCORE += 25;
                 }
                 Destroy(otherGO);
                 ShowDamage();

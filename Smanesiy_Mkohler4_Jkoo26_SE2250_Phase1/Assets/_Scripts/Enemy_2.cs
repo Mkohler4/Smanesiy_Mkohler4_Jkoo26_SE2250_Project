@@ -45,13 +45,13 @@ public class Enemy_2 : Enemy
             case "ProjectileHero":
                 Projectile p = otherGO.GetComponent<Projectile>();
                 
-                health -= 5; //Main.GetWeaponDefinition(p.type).damageOnHit;
+                health -= 5;
                 if (health <= 0)
                 {
                     // Destroy this Enemy
                     Destroy(this.gameObject);
-                    //ScoreManager.S.addScore(score);
-                    ScoreManager.score += 50;
+                    //Update score when specific enemy is destroyed by 50
+                    ScoreManager.SCORE += 50;
                 }
                 Destroy(otherGO);
                 ShowDamage();

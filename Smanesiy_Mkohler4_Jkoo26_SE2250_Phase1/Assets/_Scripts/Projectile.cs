@@ -28,6 +28,7 @@ public class Projectile : MonoBehaviour
 
     void Awake()
     {
+        //Get components
         _bndCheck = GetComponent<BoundsCheck>();
         _rend = GetComponent<Renderer>();
         rigid = GetComponent<Rigidbody>();
@@ -36,6 +37,7 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Delete projectile if it goes off the screen
         if (_bndCheck.offUp)
         {
             Destroy(gameObject);
