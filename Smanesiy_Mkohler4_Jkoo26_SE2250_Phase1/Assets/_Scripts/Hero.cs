@@ -60,22 +60,36 @@ public class Hero : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         Transform rootT = other.gameObject.transform.root;
-        GameObject go = rootT.gameObject;
+        GameObject gameObj = rootT.gameObject;
         
-        if (go == _lastTriggerGo)
+        if (gameObj == _lastTriggerGo)
         {
             return;
         }
-        _lastTriggerGo = go;
-        if (go.tag == "Enemy") //If the shield was triggered by an enemy
+        _lastTriggerGo = gameObj;
+        if (gameObj.tag == "Enemy") //If the shield was triggered by an enemy
         {
             shieldLevel--;    //Decrease the level of the sheild by 1   
-            Destroy(go);       //... and Destroy the enemy
+            Destroy(gameObj);       //... and Destroy the enemy
+        }
+        else if(gameObj.tag == "PowerUp")
+        {
+            //If the shield was triggered by a PowerUp
+            AbsorbPowerUp(gameObj);
         }
         else
         {
-            print("Triggered by non-Enemy: " + go.name);
+            print("Triggered by non-Enemy: " + gameObj.name);
         }
+    }
+    public void AbsorbPowerUp(GameObject gameObj)
+    {
+        PowerUp powerUp = gameObj.GetComponent<PowerUp>();
+        switch (powerUp.type)
+        {
+            
+        }
+        powerUp.AbsorbedBy(this.gameObject);
     }
 
     public float shieldLevel
