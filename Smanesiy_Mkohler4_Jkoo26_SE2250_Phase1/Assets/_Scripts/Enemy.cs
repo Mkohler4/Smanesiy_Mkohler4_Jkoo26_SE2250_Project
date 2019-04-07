@@ -9,8 +9,11 @@ public class Enemy : MonoBehaviour
     public float fireRate = 0.3f;
     public float health = 10;
     protected int score = 100;
-    public float showDamageDuration = 0.1f; //#seconds to show damage
-    public float powerUpDropChance = 1f;    // Chance to drop a power-up
+    public float showDamageDuration = 0.1f; //#seconds to show damage 
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 40;
+    public delegate void WeaponFireDelegate();
+    public WeaponFireDelegate fireDelegate;
 
     //[Header("These fields are set dynamically")]
 
@@ -62,6 +65,7 @@ public class Enemy : MonoBehaviour
             UnShowDamage();
         }
        
+       
     }
     public virtual void Move()
     {
@@ -90,7 +94,8 @@ public class Enemy : MonoBehaviour
                     //Tell the Main singleton that this ship was destroyed
                     if (!notifiedOfDestruction)
                     {
-                        Main.SHIP.ShipDestroyed(this);
+                        Enemy enemy = this;
+                        Main.SHIP.ShipDestroyed(enemy);
                     }
                     notifiedOfDestruction = true;
                     // Destroy this Enemy

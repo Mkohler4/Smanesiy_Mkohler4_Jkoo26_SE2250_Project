@@ -5,10 +5,12 @@ using UnityEngine;
 //It also inlcudes a shield typer to allow a shield power-up
 public enum WeaponType
 {
-    none,   //The default / no weapon
-    simple,    //A simple blaster
+
+    none,//The default / no weapon
+    simple, //A simple blaster
     blaster,     //Two shots simultaneously
-    shield      //Raise shieldLevel
+    shield, //Raise shieldLevel
+    upgrade,
 }
 //The WeaponDefinition class allows you to set the properties
 //of a specific weapon in the Inspector. The Main class has
@@ -30,16 +32,17 @@ public class WeaponDefinition
 public class Weapon : MonoBehaviour
 {
     static public Transform PROJECTILE_ANCHOR;
-
+    public int angle = 0;
     [Header("Set Dynamically")]
     [SerializeField]
     private WeaponType _type = WeaponType.none;
     public WeaponDefinition def;
     public GameObject collar;
     public float lastShotTime; // Time las shot was fired
-
+    public int upgrade = 0;
     private Renderer _collarRend;
-
+    private int _timer = 10;
+    private bool _stop = false;
     
     // Start is called before the first frame update
     void Start()
@@ -77,6 +80,9 @@ public class Weapon : MonoBehaviour
             SetType(value);
         }
     }
+
+    public static Projectile projectile { get; internal set; }
+
     //Set the weapon of choice
     //If weapon type is none the game object is disabled and visually disappears from the scene
     public void SetType(WeaponType weaponType)
@@ -137,7 +143,27 @@ public class Weapon : MonoBehaviour
                 projectile.transform.rotation = Quaternion.AngleAxis(-30, Vector3.back);
                 projectile.rigid.velocity = projectile.transform.rotation * vel;
                 break;
-
+            case WeaponType.upgrade:
+                projectile = MakeProjectile();   // Make projectile
+                //Assign velocity to the gameobjects rigid body in direction of vel
+                projectile.rigid.velocity = vel;
+                projectile = MakeProjectile();   //Make projectile
+                //Rotate projectile around vector3.back axis
+                projectile.transform.rotation = Quaternion.AngleAxis(30, Vector3.back);
+                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                projectile = MakeProjectile();   //Make projectile
+                //Rotate projectile around vector3.back axis
+                projectile.transform.rotation = Quaternion.AngleAxis(-30, Vector3.back);
+                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                projectile = MakeProjectile();   //Make projectile
+                //Rotate projectile around vector3.back axis
+                projectile.transform.rotation = Quaternion.AngleAxis(15, Vector3.back);
+                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                projectile = MakeProjectile();   //Make projectile
+                //Rotate projectile around vector3.back axis
+                projectile.transform.rotation = Quaternion.AngleAxis(-15, Vector3.back);
+                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                break;
         }
                     
     }
@@ -170,6 +196,7 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         //If keycode C is pressed switch the current weapon
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -181,6 +208,15 @@ public class Weapon : MonoBehaviour
             {
                 type = WeaponType.simple;
             }
+        }
+        if(Hero.ship.unlock !=0)
+        {
+            type = WeaponType.upgrade;
+            Hero.ship.unlock--;
+        }
+        if(type == WeaponType.upgrade && Hero.ship.unlock == 0)
+        {
+            type = WeaponType.simple;
         }
     }
 }

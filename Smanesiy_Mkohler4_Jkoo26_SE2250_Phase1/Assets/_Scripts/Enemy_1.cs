@@ -51,9 +51,15 @@ public class Enemy_1 : Enemy
                 health -= 10;
                 if (health <= 0)
                 {
+                    if (!notifiedOfDestruction)
+                    {
+                        Main.SHIP.ShipDestroyed(this);
+                    }
+
+                    ScoreManager.SCORE += 25;
                     // Destroy this Enemy
                     Destroy(this.gameObject);
-                    ScoreManager.SCORE += 25;
+                    
                 }
                 Destroy(otherGO);
                 ShowDamage();

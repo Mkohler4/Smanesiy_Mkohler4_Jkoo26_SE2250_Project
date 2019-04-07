@@ -53,12 +53,6 @@ public class PowerUp : MonoBehaviour
         birthTime = Time.time;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -109,5 +103,6 @@ public class PowerUp : MonoBehaviour
         //This function is called by the Hero class when a PowerUp is collected
         //We could take the target and shrink the size but for now we will destory this.gameObject
         Destroy(this.gameObject);
+
     }
 }

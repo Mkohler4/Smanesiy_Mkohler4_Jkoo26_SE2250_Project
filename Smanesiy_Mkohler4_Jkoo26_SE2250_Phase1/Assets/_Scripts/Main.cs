@@ -10,24 +10,26 @@ public class Main : MonoBehaviour
 
     [Header("Set in Inspector")]
     public GameObject[] prefabEnemies;
+    public WeaponType powerUpType;
     public float enemySpawnPerSecond = 1f;
     public float enemyDefaultPadding = 1.5f;
     public WeaponDefinition[] weaponDefinitions;
     public GameObject prefabPowerUp;
+    public float powerUpDropChance = 1f;
     public WeaponType[] powerUpFrequency = new WeaponType[]
     {
-        WeaponType.simple, WeaponType.blaster };
+        WeaponType.simple, WeaponType.blaster, WeaponType.upgrade };
     private BoundsCheck _bndCheck;
 
     public void ShipDestroyed(Enemy enemy)
     {
         //Potentially generate a PowerUp
-        if (Random.value <= enemy.powerUpDropChance)
+        if (Random.value <= powerUpDropChance)
         {
             //Choose which PowerUp to pick
             //Pick one from the possibilities in powerUpFrequency
             int index = Random.Range(0, powerUpFrequency.Length);
-            WeaponType powerUpType = powerUpFrequency[index];
+            powerUpType = powerUpFrequency[index];
 
             //Spawn a PowerUp
             GameObject gameObj = Instantiate(prefabPowerUp) as GameObject;
@@ -36,6 +38,7 @@ public class Main : MonoBehaviour
             powerUp.SetType(powerUpType);
             // Set it tot he position of the destroyed ship
             powerUp.transform.position = enemy.transform.position;
+            
         }
     }
 

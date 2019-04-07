@@ -48,6 +48,10 @@ public class Enemy_2 : Enemy
                 health -= 5;
                 if (health <= 0)
                 {
+                    if (!notifiedOfDestruction)
+                    {
+                        Main.SHIP.ShipDestroyed(this);
+                    }
                     // Destroy this Enemy
                     Destroy(this.gameObject);
                     //Update score when specific enemy is destroyed by 50

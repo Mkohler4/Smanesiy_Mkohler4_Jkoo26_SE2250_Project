@@ -13,9 +13,9 @@ public class Hero : MonoBehaviour
     public float gameRestartDelay = 2f;
     public GameObject projectilePrefab;
     public float projectileSpeed = 40;
+    public float unlock = 0;
 
-   
-
+    private BoundsCheck _bndCheck;
 
     [Header("Set Dynamically")]
     [SerializeField]
@@ -61,16 +61,28 @@ public class Hero : MonoBehaviour
     {
         Transform rootT = other.gameObject.transform.root;
         GameObject gameObj = rootT.gameObject;
-        
+        GameObject otherGameObj = other.gameObject;
+        if (otherGameObj.tag == "ProjectileEnemy")
+        {
+            Projectile p = otherGameObj.GetComponent<Projectile>();
+            shieldLevel--;
+            Destroy(otherGameObj);
+        }
         if (gameObj == _lastTriggerGo)
         {
             return;
         }
         _lastTriggerGo = gameObj;
+        if(gameObj.tag == "ProjectileEnemy")
+        {
+            shieldLevel--;
+            Destroy(gameObj);
+        }
         if (gameObj.tag == "Enemy") //If the shield was triggered by an enemy
         {
             shieldLevel--;    //Decrease the level of the sheild by 1   
             Destroy(gameObj);       //... and Destroy the enemy
+            
         }
         else if(gameObj.tag == "PowerUp")
         {
@@ -82,6 +94,18 @@ public class Hero : MonoBehaviour
             print("Triggered by non-Enemy: " + gameObj.name);
         }
     }
+    /*public void OnCollisionEnter(Collision collision)
+    {
+        GameObject otherGameObj = collision.gameObject;
+        if(otherGameObj.tag == "ProjectileEnemy")
+        {
+            Projectile p = otherGameObj.GetComponent<Projectile>();
+            shieldLevel--;
+            Destroy(otherGameObj);
+
+
+        }
+    }*/
     public void AbsorbPowerUp(GameObject gameObj)
     {
         PowerUp powerUp = gameObj.GetComponent<PowerUp>();
@@ -90,6 +114,15 @@ public class Hero : MonoBehaviour
             
         }
         powerUp.AbsorbedBy(this.gameObject);
+        if(Main.SHIP.powerUpFrequency[1] == Main.SHIP.powerUpType)
+        {
+            Hero.ship.shieldLevel++;
+
+        }
+        if(Main.SHIP.powerUpFrequency[0] == Main.SHIP.powerUpType)
+        {
+            unlock = 300;
+        }
     }
 
     public float shieldLevel
