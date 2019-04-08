@@ -72,7 +72,8 @@ MonoBehaviour:
     type: 3}
   projectileSpeed: 40
   originalColors: []
-  materials: []
+  materials:
+  - {fileID: 2100000, guid: cd7964633619ad644ba6a8e78c3e7d99, type: 2}
   showingDamage: 0
   damageDoneTime: 0
   notifiedOfDestruction: 0
@@ -109,6 +110,7 @@ GameObject:
   - component: {fileID: 3537929843896410532}
   - component: {fileID: 3537929843896410531}
   - component: {fileID: 3537929843896410530}
+  - component: {fileID: 5333119949067157554}
   m_Layer: 9
   m_Name: crSphere
   m_TagString: Untagged
@@ -155,7 +157,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cd7964633619ad644ba6a8e78c3e7d99, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -188,6 +190,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5333119949067157554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3537929843896410528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 736ca57cc79cdba44825a27e6261b9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3537929844076031790
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,6 +214,7 @@ GameObject:
   - component: {fileID: 3537929844076031778}
   - component: {fileID: 3537929844076031777}
   - component: {fileID: 3537929844076031776}
+  - component: {fileID: 4204450359183155494}
   m_Layer: 9
   m_Name: sqCube
   m_TagString: Untagged
@@ -246,7 +261,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cd7964633619ad644ba6a8e78c3e7d99, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -279,6 +294,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4204450359183155494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3537929844076031790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 736ca57cc79cdba44825a27e6261b9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4621368454090648683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +324,7 @@ MonoBehaviour:
   velocity: 30
   projectilePrefab: {fileID: 5041371252690524467, guid: 311c70066304b864aab842a2e5c80314,
     type: 3}
+  counter: 0
 --- !u!1001 &7483341195842479902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -315,6 +343,11 @@ PrefabInstance:
       value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 820037629399452082, guid: 2b56b0029a8397f4b9be9e40c2be9e53,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1447585120506526776, guid: 2b56b0029a8397f4b9be9e40c2be9e53,
         type: 3}
       propertyPath: m_Layer
       value: 0
@@ -390,11 +423,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4082251233114285631, guid: 2b56b0029a8397f4b9be9e40c2be9e53,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1447585120506526776, guid: 2b56b0029a8397f4b9be9e40c2be9e53,
         type: 3}
       propertyPath: m_Layer
       value: 0

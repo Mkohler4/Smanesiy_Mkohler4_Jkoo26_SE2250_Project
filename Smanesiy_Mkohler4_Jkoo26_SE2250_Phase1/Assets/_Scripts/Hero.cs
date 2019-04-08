@@ -36,7 +36,6 @@ public class Hero : MonoBehaviour
         {
             Debug.LogError("Hero.Awake() - Attempted to assign second Hero.S!");
         }
-        //fireDelegate += TempFire;
     }
     // Update is called once per frame
     void Update()
@@ -44,11 +43,12 @@ public class Hero : MonoBehaviour
         //Move hero with arrow or letter keys
         float xAxis = Input.GetAxis("Horizontal");
         float yAxis = Input.GetAxis("Vertical");
-
+        //Calculate the ships position
         Vector3 pos = transform.position;
-        pos.y += yAxis * speed * Time.deltaTime;
-        pos.x += xAxis * speed * Time.deltaTime;
+        pos.y += yAxis * speed * Time.deltaTime * 2;
+        pos.x += xAxis * speed * Time.deltaTime * 2;
         transform.position = pos;
+        //Tilt the ship based off of position
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
 
         if(Input.GetAxis("Jump") == 1 && fireDelegate != null)
@@ -57,15 +57,18 @@ public class Hero : MonoBehaviour
         }
 
     }
+    //Collision witht the projectile of the enemy is ontrigger so the collision can't physically be seen
     void OnTriggerEnter(Collider other)
     {
         Transform rootT = other.gameObject.transform.root;
         GameObject gameObj = rootT.gameObject;
         GameObject otherGameObj = other.gameObject;
+        //If the hero is is with enemy projectile subtract a sheild from the hero
         if (otherGameObj.tag == "ProjectileEnemy")
         {
             Projectile p = otherGameObj.GetComponent<Projectile>();
             shieldLevel--;
+            //Destroy the projectile after collision
             Destroy(otherGameObj);
         }
         if (gameObj == _lastTriggerGo)
@@ -73,58 +76,38 @@ public class Hero : MonoBehaviour
             return;
         }
         _lastTriggerGo = gameObj;
-        if(gameObj.tag == "ProjectileEnemy")
-        {
-            shieldLevel--;
-            Destroy(gameObj);
-        }
+        //If hero ship collides with enemy subtract 1 from the shild of the hero
         if (gameObj.tag == "Enemy") //If the shield was triggered by an enemy
         {
             shieldLevel--;    //Decrease the level of the sheild by 1   
             Destroy(gameObj);       //... and Destroy the enemy
             
         }
+        //If hero collides with powerup absorb the powerup
         else if(gameObj.tag == "PowerUp")
         {
             //If the shield was triggered by a PowerUp
             AbsorbPowerUp(gameObj);
         }
-        else
-        {
-            print("Triggered by non-Enemy: " + gameObj.name);
-        }
+       
     }
-    /*public void OnCollisionEnter(Collision collision)
-    {
-        GameObject otherGameObj = collision.gameObject;
-        if(otherGameObj.tag == "ProjectileEnemy")
-        {
-            Projectile p = otherGameObj.GetComponent<Projectile>();
-            shieldLevel--;
-            Destroy(otherGameObj);
-
-
-        }
-    }*/
     public void AbsorbPowerUp(GameObject gameObj)
     {
         PowerUp powerUp = gameObj.GetComponent<PowerUp>();
-        switch (powerUp.type)
-        {
-            
-        }
         powerUp.AbsorbedBy(this.gameObject);
-        if(Main.SHIP.powerUpFrequency[1] == Main.SHIP.powerUpType)
+        //If hero collides with blue power up add one to the hero's sheild
+        if(powerUp.type == WeaponType.blaster)
         {
             Hero.ship.shieldLevel++;
 
         }
-        if(Main.SHIP.powerUpFrequency[0] == Main.SHIP.powerUpType)
+        //If hero collides with the white power up unlock the special weapon for 30 frames
+        if(powerUp.type == WeaponType.simple)
         {
             unlock = 300;
         }
     }
-
+    //Define setter and getter methods for the sheild variable
     public float shieldLevel
     {
         get
@@ -133,11 +116,12 @@ public class Hero : MonoBehaviour
         }
         set
         {
+            //Set the max sheild level possible to obtain to 4
             _shieldLevel = Mathf.Min(value, 4);
+            //If hero has no more sheild and gets hit by enemy object destroy the hero
             if (value < 0)
             {
-                Destroy(this.gameObject);
-                ScoreManager.SCORE = 0;
+                Destroy(this.gameObject);                            
                 //Tell Main.ship to restart the game after a delay
                 Main.SHIP.DelayedRestart(gameRestartDelay);
             }

@@ -7,8 +7,9 @@ public class Main : MonoBehaviour
 {
     static public Main SHIP;
     static Dictionary<WeaponType, WeaponDefinition> WEAP_DICT;
-
+    //Declare variables
     [Header("Set in Inspector")]
+    public int ndx;
     public GameObject[] prefabEnemies;
     public WeaponType powerUpType;
     public float enemySpawnPerSecond = 1f;
@@ -16,6 +17,7 @@ public class Main : MonoBehaviour
     public WeaponDefinition[] weaponDefinitions;
     public GameObject prefabPowerUp;
     public float powerUpDropChance = 1f;
+    public int index = 0;
     public WeaponType[] powerUpFrequency = new WeaponType[]
     {
         WeaponType.simple, WeaponType.blaster, WeaponType.upgrade };
@@ -23,12 +25,12 @@ public class Main : MonoBehaviour
 
     public void ShipDestroyed(Enemy enemy)
     {
-        //Potentially generate a PowerUp
-        if (Random.value <= powerUpDropChance)
+        //Potentially generate a PowerUp chance is 40%
+        if (Random.Range(0, 8) <= powerUpDropChance)
         {
             //Choose which PowerUp to pick
             //Pick one from the possibilities in powerUpFrequency
-            int index = Random.Range(0, powerUpFrequency.Length);
+            index = Random.Range(0, 2);
             powerUpType = powerUpFrequency[index];
 
             //Spawn a PowerUp
@@ -45,6 +47,7 @@ public class Main : MonoBehaviour
     void Awake()
     {
         SHIP = this;
+        //Bound check for the ship so ship doesn't go off screen
         _bndCheck = GetComponent<BoundsCheck>();
         //Takes method name and invokes it every 1 second
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
@@ -55,13 +58,16 @@ public class Main : MonoBehaviour
         {
             WEAP_DICT[def.type] = def;
         }
+        ScoreManager.SCORE = 0;
     }
     
     //Gets called every second
     public void SpawnEnemy()
     {
-        int ndx = Random.Range(0, prefabEnemies.Length);
-        GameObject go = Instantiate<GameObject>(prefabEnemies[ndx]);
+        //Generate a random number between 0 and 2
+        ndx = Random.Range(0, 3);
+        //Don't let the baby enemy spawn as he will be used as a kid for the other enemies
+        GameObject go = Instantiate<GameObject>(prefabEnemies[ndx==1?ndx-1:ndx]);
         float enemyPadding = enemyDefaultPadding;
         if(go.GetComponent<BoundsCheck>() != null)
         {

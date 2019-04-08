@@ -25,6 +25,8 @@ public class ScoreManager : MonoBehaviour
             //Save a new highscore if the current score is greater than the old highscore
             PlayerPrefs.SetInt("High Score: ", SCORE);
             scoreBoard.text = SCORE.ToString();
+            //Update the highscore if the score is greater than the previous highscore
+            highScore.text = "High Score: " + PlayerPrefs.GetInt("High Score: ", 0).ToString();
         }
 
     }

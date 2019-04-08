@@ -41,8 +41,6 @@ public class Weapon : MonoBehaviour
     public float lastShotTime; // Time las shot was fired
     public int upgrade = 0;
     private Renderer _collarRend;
-    private int _timer = 10;
-    private bool _stop = false;
     
     // Start is called before the first frame update
     void Start()
@@ -108,7 +106,7 @@ public class Weapon : MonoBehaviour
         if (!gameObject.activeInHierarchy) return;
         //If it hasn't been enough time netween shots, return
         //If the current time minus the lastShotTime is less that the delatBetweenShots weapon will not fire
-        if(Time.time - lastShotTime < def.delayBetweenShots)
+        if (Time.time - lastShotTime < (def.delayBetweenShots - 0.1))
         {
             return;
         }
@@ -126,22 +124,22 @@ public class Weapon : MonoBehaviour
             case WeaponType.simple:
                 projectile = MakeProjectile(); //Make projectile
                 //Assign velocity to the gameobjects rigid body in direction of vel
-                projectile.rigid.velocity = vel;
+                projectile.rigid.velocity = vel * 3;
                 break;
 
             //Project the blaster, three projectiles are created, to have their direction rotated 30 degrees
             case WeaponType.blaster:
                 projectile = MakeProjectile();   // Make projectile
                 //Assign velocity to the gameobjects rigid body in direction of vel
-                projectile.rigid.velocity = vel;
+                projectile.rigid.velocity = vel * 3;
                 projectile = MakeProjectile();   //Make projectile
                 //Rotate projectile around vector3.back axis
                 projectile.transform.rotation = Quaternion.AngleAxis(30, Vector3.back);
-                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                projectile.rigid.velocity = projectile.transform.rotation * vel * 3;
                 projectile = MakeProjectile();   //Make projectile
                 //Rotate projectile around vector3.back axis
                 projectile.transform.rotation = Quaternion.AngleAxis(-30, Vector3.back);
-                projectile.rigid.velocity = projectile.transform.rotation * vel;
+                projectile.rigid.velocity = projectile.transform.rotation * vel * 3;
                 break;
             case WeaponType.upgrade:
                 projectile = MakeProjectile();   // Make projectile
@@ -209,11 +207,13 @@ public class Weapon : MonoBehaviour
                 type = WeaponType.simple;
             }
         }
+        //If hero picks up white cube be forced to unlock the upgraded weapon 
         if(Hero.ship.unlock !=0)
         {
             type = WeaponType.upgrade;
             Hero.ship.unlock--;
         }
+        //When the upgraded weapon goes away force the weapon to go back to the simple weapon
         if(type == WeaponType.upgrade && Hero.ship.unlock == 0)
         {
             type = WeaponType.simple;

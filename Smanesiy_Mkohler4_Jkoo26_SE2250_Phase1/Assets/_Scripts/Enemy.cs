@@ -5,15 +5,16 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [Header("Set in Inspector: Enemy")]
+    //public GameObject[] prefabEnemies;
     public float speed = 10f;
     public float fireRate = 0.3f;
     public float health = 10;
-    protected int score = 100;
     public float showDamageDuration = 0.1f; //#seconds to show damage 
     public GameObject projectilePrefab;
     public float projectileSpeed = 40;
     public delegate void WeaponFireDelegate();
     public WeaponFireDelegate fireDelegate;
+    int counter = 1;
 
     //[Header("These fields are set dynamically")]
 
@@ -51,29 +52,46 @@ public class Enemy : MonoBehaviour
             this.transform.position = value;
         }
     }
-
+    //Update function used by enemy0 and enemy2 
     void Update()
     {
+        
         //if the enemy moves off the screen in the y direction destroy the object
         Move();
         if(_bndCheck != null && _bndCheck.offDown)
         {
             Destroy(gameObject);
         }
+        //unshow the damage the enemy has previously taken
         if(showingDamage && Time.time > damageDoneTime)
         {
             UnShowDamage();
         }
-       
-       
+        if (ScoreManager.SCORE >= 500)
+        {
+            //Instatiate a child after 50 frames
+            if (counter % 50 == 0)
+            {
+                GameObject go = Instantiate<GameObject>(Main.SHIP.prefabEnemies[1]);
+                //Get the position of the parent object
+                go.transform.position = pos;
+                //Set that position to the position of the child object 
+                Vector3 temp = pos;
+            }
+        }
+        //Increment counter to keep track of the frames
+        counter++;
+             
     }
+    //Move the enemy straight down the screen
     public virtual void Move()
     {
         //Moves the two enemies straight downward 
         Vector3 tempPos = pos;
-        tempPos.y -= speed * Time.deltaTime;
+        tempPos.y -= speed * Time.deltaTime * 3;
         pos = tempPos;
     }
+    //If there is a collision between the hero and the enemy destroy the enemy 
     public virtual void OnCollisionEnter(Collision coll)
     {
         GameObject otherGO = coll.gameObject;
@@ -101,7 +119,7 @@ public class Enemy : MonoBehaviour
                     // Destroy this Enemy
                     Destroy(this.gameObject);
                     //Update score when specific enemy is destroyed by 100
-                    ScoreManager.SCORE += 100;
+                    ScoreManager.SCORE += 25;
                 }
                 Destroy(otherGO);
                 ShowDamage();
@@ -113,7 +131,7 @@ public class Enemy : MonoBehaviour
         }
 
     }
-
+    //Show the damge dealt to the enemy while the enemy is taking damage
     public void ShowDamage()
     {
         //When shot at change enemy colour to red on impact

@@ -6,17 +6,38 @@ using System;
 public class Enemy_1 : Enemy
 {
     int rndnumber = 0;
-    // Start is called before the first frame update
+    private BoundsCheck _bndCheck;
+    void Awake()
+    {
+        _bndCheck = GetComponent<BoundsCheck>();
+    }
+
     void Start()
     {
-        score = 25;
         //Chooses the the direction of the 45 degree enemy based off where they spawn
-        if (pos.x > (Camera.main.orthographicSize* Camera.main.aspect)/2)
+        if (pos.x > (((Camera.main.orthographicSize* Camera.main.aspect)/2) - 10))
         {
             rndnumber = 1;
         }
       
     }
+    //Override the update function so children can't have children objects
+    void Update()
+    {
+
+        //if the enemy moves off the screen in the y direction destroy the object
+        Move();
+        if (_bndCheck != null && _bndCheck.offDown)
+        {
+            Destroy(gameObject);
+        }
+        if (showingDamage && Time.time > damageDoneTime)
+        {
+            UnShowDamage();
+        }
+    }
+    //Move the enemy in a diagonal direction
+    //Override the move function
     public override void Move()
     {
         //If they spawn more to the left of the screen
@@ -40,6 +61,7 @@ public class Enemy_1 : Enemy
         }
         
     }
+    //Destroy the enemy if the enemy collides with the hero
     public override void OnCollisionEnter(Collision coll)
     {
         GameObject otherGO = coll.gameObject;
@@ -55,12 +77,13 @@ public class Enemy_1 : Enemy
                     {
                         Main.SHIP.ShipDestroyed(this);
                     }
-
-                    ScoreManager.SCORE += 25;
+                    //Increment the total score
+                    ScoreManager.SCORE += 10;
                     // Destroy this Enemy
                     Destroy(this.gameObject);
                     
                 }
+                //Show the damage the enemy has taken and destroy the enemy
                 Destroy(otherGO);
                 ShowDamage();
                 break;

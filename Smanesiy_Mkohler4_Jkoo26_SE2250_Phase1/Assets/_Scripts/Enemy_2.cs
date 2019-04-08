@@ -12,14 +12,13 @@ public class Enemy_2 : Enemy
     private float _x0;
     private float _birthTime;
 
-
     //Start is called before the first frame update
     void Start()
     {
         _x0 = pos.x;
         _birthTime = Time.time;
-        score = 50;
     }
+    
 
     //Overide Move function on Enemy
     public override void Move()
@@ -27,7 +26,7 @@ public class Enemy_2 : Enemy
         //Move enemy in a sin wave pattern 
         Vector3 tempPos = pos;
         float age = Time.time - _birthTime;
-        float theta = Mathf.PI * 2 * age / waveFrequency;
+        float theta = (Mathf.PI * 2 * age / waveFrequency);
         float sin = Mathf.Sin(theta);
         tempPos.x = _x0 + waveWidth * sin;
         pos = tempPos;
@@ -37,6 +36,7 @@ public class Enemy_2 : Enemy
 
         base.Move();
     }
+    //If the enemy collides with the hero destroy the enemy
     public override void OnCollisionEnter(Collision coll)
     {
         GameObject otherGO = coll.gameObject;
@@ -55,7 +55,7 @@ public class Enemy_2 : Enemy
                     // Destroy this Enemy
                     Destroy(this.gameObject);
                     //Update score when specific enemy is destroyed by 50
-                    ScoreManager.SCORE += 50;
+                    ScoreManager.SCORE += 15;
                 }
                 Destroy(otherGO);
                 ShowDamage();

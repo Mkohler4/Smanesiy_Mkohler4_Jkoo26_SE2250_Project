@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour
 {
+    //Declare variables
     public GameObject collar;
     private Renderer _collarRend;
     static public Transform PROJECTILE_ANCHOR;
     public float lastShotTime;
     public float delayBetweenShots = 0;
-    public float velocity = 20;
+    public float velocity = 50;
     public GameObject projectilePrefab;
     public float counter = 0;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Find where the collar object is located as the bullets will fire from there
         collar = transform.Find("Collar").gameObject;
         _collarRend = collar.GetComponent<Renderer>();
       
@@ -38,27 +40,19 @@ public class EnemyWeapon : MonoBehaviour
     void Update()
     {
         //Enemies start firing (Level 2)
-        if (ScoreManager.SCORE >= 250 && ScoreManager.SCORE < 500)
+        if (ScoreManager.SCORE >= 250)
         {
+            //Enemies fire every 50 frames
             counter++;
             if (counter % 50 == 0)
             {
-                Fire();
-            }
-        }
-        //Enemies speed up once score reaches 500 and fire rate increases (Level 3)
-        else if (ScoreManager.SCORE >= 500)
-        {
-            velocity = 40;
-            counter++;
-            if(counter % 20 == 0)
-            {
-
+                //Call fire method
                 Fire();
             }
         }
         
     }
+    //Fire function used for firing the enemy weapon
     void Fire()
     {
         if (!gameObject.activeInHierarchy) return;
@@ -67,22 +61,28 @@ public class EnemyWeapon : MonoBehaviour
             return;
         }
         Projectile projectile;
+        //Make the velocity of the bullet go straight down
         Vector3 vel = Vector3.down * velocity;
+        //If bullet is firing up make it fire down so it hits the hero
         if (transform.up.y > 500)
         {
             vel.y = -vel.y;
         }
+        //Make a projectile
         projectile = MakeProjectile();
-        projectile.rigid.velocity = vel;
+        projectile.rigid.velocity = vel * 3;
         //(Level 4) Enimies start making different projectiles
         if(ScoreManager.SCORE >= 750)
         {
+            //Make two different projectiles for the enemies with different angles
             projectile = MakeProjectile();
-            projectile.transform.rotation = Quaternion.AngleAxis(30, Vector3.back);
-            projectile.rigid.velocity = projectile.transform.rotation * vel;
+            //Get the angle that the bullet will be traveling
+            projectile.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
+            //Get the velocity of the bullet
+            projectile.rigid.velocity = projectile.transform.rotation * vel * 3;
             projectile = MakeProjectile();
-            projectile.transform.rotation = Quaternion.AngleAxis(-30, Vector3.back);
-            projectile.rigid.velocity = projectile.transform.rotation * vel;
+            projectile.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
+            projectile.rigid.velocity = projectile.transform.rotation * vel * 3;
         }
     }
     public Projectile MakeProjectile()
@@ -100,6 +100,7 @@ public class EnemyWeapon : MonoBehaviour
             gameObj.tag = "ProjectileHero";
             gameObj.layer = LayerMask.NameToLayer("ProjectileHero");
         }
+        //Find the position for the collar of the barrel
         gameObj.transform.position = collar.transform.position;
         //The projectile GameObject's parent is set to projectil_anchor
         gameObj.transform.SetParent(PROJECTILE_ANCHOR, true);
