@@ -40,13 +40,23 @@ public class EnemyWeapon : MonoBehaviour
     void Update()
     {
         //Enemies start firing (Level 2)
-        if (ScoreManager.SCORE >= 250)
+        if (ScoreManager.SCORE >= 250 && ScoreManager.SCORE < 500)
         {
             //Enemies fire every 50 frames
             counter++;
             if (counter % 50 == 0)
             {
                 //Call fire method
+                Fire();
+            }
+        }
+        //Enemies start shooting faster (Level 3 and max level)
+        //Shoot once every 30 frames
+        else if(ScoreManager.SCORE >= 500)
+        {
+            counter++;
+            if(counter % 25 == 0)
+            {
                 Fire();
             }
         }
@@ -62,7 +72,8 @@ public class EnemyWeapon : MonoBehaviour
         }
         Projectile projectile;
         //Make the velocity of the bullet go straight down
-        Vector3 vel = Vector3.down * velocity;
+        Vector3 vel = Vector3.down * velocity * 3;
+        
         //If bullet is firing up make it fire down so it hits the hero
         if (transform.up.y > 500)
         {
@@ -70,7 +81,7 @@ public class EnemyWeapon : MonoBehaviour
         }
         //Make a projectile
         projectile = MakeProjectile();
-        projectile.rigid.velocity = vel * 3;
+        projectile.rigid.velocity = vel;
         //(Level 4) Enimies start making different projectiles
         if(ScoreManager.SCORE >= 750)
         {
@@ -79,10 +90,10 @@ public class EnemyWeapon : MonoBehaviour
             //Get the angle that the bullet will be traveling
             projectile.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
             //Get the velocity of the bullet
-            projectile.rigid.velocity = projectile.transform.rotation * vel * 3;
+            projectile.rigid.velocity = projectile.transform.rotation * vel;
             projectile = MakeProjectile();
             projectile.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
-            projectile.rigid.velocity = projectile.transform.rotation * vel * 3;
+            projectile.rigid.velocity = projectile.transform.rotation * vel;
         }
     }
     public Projectile MakeProjectile()
