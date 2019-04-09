@@ -58,6 +58,7 @@ public class Main : MonoBehaviour
         {
             WEAP_DICT[def.type] = def;
         }
+        //Set score to 0 at the biggining of the next game
         ScoreManager.SCORE = 0;
     }
     
